@@ -12,22 +12,15 @@ p = 'data\Population_and_migration.pdf'        # Assigning PDF filepath to varia
 # Creating data frames for extraction
 gdp_levels = []
 population = []
+codes = {}
 codes = json.load(j)
-gdp_levels = pd.read_csv(c)
+gdp_levels = pd.read_csv(c).fillna(0)
 tabula.convert_into(p, "Population.csv", output_format= "csv", pages= 3)
 population = pd.read_csv("Population.csv")
 
-# Clean file outputs
+# Clean converted file output
 def clean_output():
     for column in population.loc[:, population.columns != 'Unnamed: 0']:
         population[column] = population[column].str.replace(" ", "")
         population[column] = population[column].replace("..", "0")
     return population
-
-
-def clean_more(): 
-    for column in gdp_levels.iloc[:61]:
-        gdp_levels[column] = gdp_levels[column].fillna(0)
-    return gdp_levels
-
-gdp_levels.head()
